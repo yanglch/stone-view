@@ -27,8 +27,17 @@ const getIcon = icon => {
   }
   return icon;
 };
-
+import { enquireScreen } from 'enquire-js';
+let isMobile;
+enquireScreen((b) => {
+  isMobile = b;
+});
+const { location } = window;
 export default class BaseMenu extends PureComponent {
+
+  state = {
+    isMobile: !location.port
+  };
   /**
    * 获得菜单子节点
    * @memberof SiderMenu
@@ -42,6 +51,12 @@ export default class BaseMenu extends PureComponent {
       .map(item => this.getSubMenuOrItem(item))
       .filter(item => item);
   };
+
+  componentDidMount() {
+    enquireScreen((b) => {
+      this.setState({ isMobile: !!b });
+    });
+  }
 
   // Get the currently selected menu
   getSelectedMenuKeys = pathname => {
@@ -143,21 +158,22 @@ export default class BaseMenu extends PureComponent {
         openKeys: openKeys.length === 0 ? [...selectedKeys] : openKeys,
       };
     }
-    const { handleOpenChange, style, menuData } = this.props;
+    const { handleOpenChange, style, menuData, onClickTigger } = this.props;
     const cls = classNames(className, {
       'top-nav-menu': mode === 'horizontal',
     });
-
+    const { isMobile } = this.state;
+    const menuMode = isMobile ? 'inline' : 'horizontal';
     return (
       <Menu
         key="Menu"
-        mode={mode}
+        mode={menuMode}
         theme={theme}
         onOpenChange={handleOpenChange}
         selectedKeys={selectedKeys}
-        style={{ float: 'right' }}
-        className={cls}
         {...props}
+        onClick={onClickTigger}
+        style={{marginTop: "17px"}}
       >
         {this.getNavMenuItems(menuData)}
       </Menu>

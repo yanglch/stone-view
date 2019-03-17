@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import 'rc-banner-anim/assets/index.css';
 import Carousel from "./Carousel";
+import Content from "./Content";
 
 @connect(({ chart, loading }) => ({
   chart,
@@ -10,7 +11,10 @@ import Carousel from "./Carousel";
 class Analysis extends Component {
   render() {
     return (
-      <Carousel/>
+      <div>
+        <Carousel/>
+        <Content/>
+      </div>
     );
   }
 }
